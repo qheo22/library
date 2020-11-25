@@ -1,0 +1,164 @@
+use library;
+
+#유저정보
+create table lib_member(
+user_id    varchar(45)    primary key , #유저아이디
+password    varchar(45),      #비밀번호
+name      varchar(45),      #이름
+gender      varchar(45),      #성별
+birth      varchar(45),      #생년월일
+email      varchar(45),      #이메일
+phone      varchar(45),      #전화번호
+address      varchar(45)         #주소
+);
+
+#도서정보
+create table library(
+book_id     int  primary key not null auto_increment,    #도서코드
+book_name   varchar(45),       #제목
+image       varchar(200),       #이미지
+author      varchar(45),       #저자
+publisher   varchar(45),       #출판사
+issueyear   varchar(10),      #발행년도
+state      int,            #대여상태
+term       date,            #반납기간
+reserve_no   varchar(45) default 0       #예약순번
+);
+
+select * from board_comment;
+
+create table board_comment(
+user_id varchar(45)   ,
+bno int,
+board_comment varchar(45),
+writetime datetime,
+comment_no int  AUTO_INCREMENT PRIMARY KEY
+);
+
+drop table board_comment;
+
+delete from board_comment where comment_no >2;
+
+
+insert into board_comment(user_id,bno,board_comment) values("qheo22",3,"댓글내용임");
+
+
+
+
+
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("나미야 잡화점","resources\\Images\\07102772.jpg","게이고","동아","2011",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("아가씨와밤","resources\\Images\\14203371.jpg","기욤뮈소","밝은세상","2018",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("나랑 친구 할래?","resources\\Images\\02748085.jpg","박신식","책세상","2007",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("구해줘","resources\\Images\\02504290.jpg","기욤뮈소","밝은세상","2018",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("은밀하게 위대하게","resources\\Images\\은위.jpg","최종훈","걸리버","2013",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("걸리버 여행기","resources\\Images\\걸리버.jpg","조너선 스위프트","한국셰익스피어","2015",0,null);
+
+insert into library(book_name,image,author,publisher,issueyear,state,term) 
+values("택시 소년","resources\\Images\\택시소년.jpg","데보라 엘리스","천개의바람","2014",0,null);
+
+#대여정보
+create table book_loan(
+no         int primary key not null auto_increment,   #번호
+user_id      varchar(45),      #유저아이디
+book_id    int ,            #도서코드   
+loan_date   date,            #대출날짜   
+return_date date,            #반납날짜
+arrears      int             #연체일
+);
+
+
+#예약정보
+create table book_reserve(      #예약현황
+no            int primary key not null auto_increment,   #번호
+user_id         varchar(45),   #유저아이디
+book_id         int ,         #도서코드 
+reserve_date   date,         #예약일
+return_reserve   date         #예약만기일
+);
+
+CREATE TABLE Board(
+    bno int auto_increment,
+    title VARCHAR(100)     NOT NULL,
+    content VARCHAR(2000)  NOT NULL,
+    writer VARCHAR(100)    NOT NULL,
+    regdate VARCHAR(100),
+    viewcnt int default 0,
+    PRIMARY KEY(BNO)
+);
+
+
+
+delete from library where book_name = 'aa';
+
+#-----------------------(등록부분)-------------------------------
+select * from lib_member;
+select * from library;
+select * from book_loan;
+select * from book_reserve;
+select * from Board;
+
+drop table lib_member;
+drop table library;
+drop table book_loan;
+drop table book_reserve;
+drop table Board;
+
+#대여상태 초기화
+update library
+set state = 0
+where state = 1;
+
+update library
+set state = 1
+where book_id = 6;
+
+update library
+set reserve_no = 0
+where reserve_no >= 1;
+
+update library
+set reserve_no = 0
+where reserve_no >= 1;
+
+select * from lib_member;
+
+
+select book_loan.book_id from book_loan,library where book_loan.book_id = library.book_id and user_id = "tr" 
+and return_date is null;
+
+   select reserve_no from library,book_reserve 
+   where library.book_id = book_reserve.book_id and
+   book_reserve.book_id = "5";
+    
+      update book_loan,library
+      set
+      term = date_add(term, interval 7 day)
+      where book_loan.book_id = library.book_id and
+      book_loan.user_id = "test" and 
+      book_loan.book_id = "3" and
+      return_date is null;
+        
+      update book_loan,library
+      set
+      return_date = now(),arrears = datediff(now(),term)
+      where 
+      book_loan.book_id = library.book_id and
+      user_id = "gus" and
+      book_loan.book_id = 5 and 
+      return_date is null ;
+      
+select * from board_comment;
+      
+delete from board_comment where comment_no=34 or comment_no=35;
